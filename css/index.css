@@ -9,6 +9,15 @@
     --border-color: #68217A
 }
 
+iframe {
+    display: block;
+    /* iframes are inline by default */
+    border: none;
+    /* Reset default border */
+    width: calc(100vw - 4px);
+    height: calc(100vh - 48px) !important;
+}
+
 html {
     margin: 0;
     padding: 0;

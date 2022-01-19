@@ -3,7 +3,8 @@ const electron = require('electron'),
     BrowserWindow = require('electron').BrowserWindow,
     ipc = electron.ipcMain,
     dialog = electron.dialog,
-    path = require('path');
+    path = require('path'),
+    BrowserView = require('electron').BrowserView;
 
 let mainWindow, settingsWindow;
 
@@ -54,6 +55,7 @@ app.on('ready', () => {
         icon: path.join(__dirname, 'unnamed.ico'),
         webPreferences: {
             preload: path.join(__dirname, '/js/mainWindowJs.js'),
+            webviewTag: true
         }
     });
     mainWindow.maximize()
@@ -69,6 +71,7 @@ app.on('ready', () => {
             icon: path.join(__dirname, 'unnamed.ico'),
             webPreferences: {
                 preload: path.join(__dirname, '/js/settingsWindowJs.js'),
+                webviewTag: true
             }
         });
         settingsWindow.loadURL(`file://${__dirname}/html/settingsWindow.html`);
@@ -76,12 +79,6 @@ app.on('ready', () => {
             settingsWindow = null;
         })
     }
-    ipc.on('openFolder', (event) => {
-        files = dialog.showOpenDialogSync(mainWindow, {
-            properties: ['openDirectory']
-        })
-        mainWindow.webContents.send('selected-file', files)
-    })
     ipc.on('getFile', (event) => {
         files = dialog.showOpenDialogSync(mainWindow, {
             properties: ['openFile']
